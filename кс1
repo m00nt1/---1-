@@ -1,8 +1,29 @@
-def sum_negative_between_min_max(arr):
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Модуль для решения задачи: сумма отрицательных элементов между max и min.
+"""
+
+from typing import List, Union
+
+def sum_negative_between_min_max(arr: List[Union[int, float]]) -> Union[int, float]:
+    """
+    Находит сумму отрицательных элементов, расположенных между 
+    максимальным и минимальным элементами массива.
+    
+    Args:
+        arr: список чисел (int или float)
+    
+    Returns:
+        Сумма отрицательных элементов между min и max.
+        Если массив содержит менее 3 элементов, возвращает 0.
+    """
     if len(arr) < 3:
         return 0
     
     min_idx = max_idx = 0
+    
     for i in range(1, len(arr)):
         if arr[i] < arr[min_idx]:
             min_idx = i
@@ -13,3 +34,84 @@ def sum_negative_between_min_max(arr):
     right = max(min_idx, max_idx)
     
     return sum(x for x in arr[left:right] if x < 0)
+
+
+def main():
+    """Интерактивный режим работы программы"""
+    print("=" * 60)
+    print("🔍 Анализатор массива")
+    print("=" * 60)
+    
+    while True:
+        print("\nВыберите действие:")
+        print("1. Ввести массив вручную")
+        print("2. Использовать пример")
+        print("3. Выйти")
+        
+        choice = input("Ваш выбор (1-3): ")
+        
+        if choice == '1':
+            try:
+                input_str = input("Введите числа через пробел: ")
+                if not input_str.strip():
+                    print("⚠️ Массив не может быть пустым")
+                    continue
+                
+                arr = [float(x) if '.' in x else int(x) 
+                       for x in input_str.split()]
+                
+                result = sum_negative_between_min_max(arr)
+                
+                print(f"\n📊 Результат:")
+                print(f"  Массив: {arr}")
+                if len(arr) >= 3:
+                    min_idx = arr.index(min(arr))
+                    max_idx = arr.index(max(arr))
+                    left = min(min_idx, max_idx) + 1
+                    right = max(min_idx, max_idx)
+                    print(f"  Минимальный: {min(arr)} (индекс {min_idx})")
+                    print(f"  Максимальный: {max(arr)} (индекс {max_idx})")
+                    print(f"  Элементы между: {arr[left:right] if left < right else '[]'}")
+                print(f"  Сумма отрицательных: {result}")
+                
+            except ValueError as e:
+                print(f"❌ Ошибка: {e}. Введите корректные числа.")
+            except Exception as e:
+                print(f"❌ Неожиданная ошибка: {e}")
+        
+        elif choice == '2':
+            examples = [
+                [3, -5, 7, -2, 9, -8, 4, -1],
+                [1, 2, 3, 4, 5],
+                [-5, -2, -8, -1, -9],
+                [-10, 0, 10, -5, 5, -1, 1],
+                [-1, 5, -1, 5, 2, -3, 8],
+                [1.5, -2.5, 3.5, -4.5, 5.5]
+            ]
+            
+            print("\n📋 Примеры массивов:")
+            for i, example in enumerate(examples, 1):
+                print(f"  {i}. {example}")
+            
+            try:
+                example_choice = int(input("Выберите пример (1-6): "))
+                if 1 <= example_choice <= len(examples):
+                    arr = examples[example_choice - 1]
+                    result = sum_negative_between_min_max(arr)
+                    print(f"\n📊 Результат для {arr}:")
+                    print(f"  Сумма отрицательных: {result}")
+                else:
+                    print("❌ Неверный номер примера")
+            except ValueError:
+                print("❌ Введите число")
+        
+        elif choice == '3':
+            print("👋 До свидания!")
+            break
+        
+        else:
+            print("❌ Неверный выбор. Попробуйте снова.")
+
+
+if __name__ == "__main__":
+    main()
